@@ -1,0 +1,5 @@
+{
+  "username": "locked_out_user",
+  "password": "secret_sauce",
+  "expectedErrorMessage": "Epic sadface: Sorry, this user has been locked out."
+}

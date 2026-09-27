@@ -4,8 +4,11 @@ import base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import java.util.ArrayList;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 import java.util.List;
 
 public class ProductPage extends BasePage {
@@ -26,36 +29,29 @@ public class ProductPage extends BasePage {
     private By backToProductsButton = By.cssSelector("[data-test='back-to-products']");
 
 
-    public List<String> getProductNameTexts() {
-        List<String> productNameTexts = new ArrayList<>();
+    private void selectSortOption(String value) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        for (WebElement product : driver.findElements(productNames)) {
-            productNameTexts.add(product.getText());
-        }
+        WebElement dropdown = wait.until(
+                ExpectedConditions.elementToBeClickable(sortDropdown)
+        );
 
-        return productNameTexts;
+        Select select = new Select(dropdown);
+        select.selectByValue(value);
     }
 
 
+    public List<String> getProductNameTexts() {
+        return getTexts(productNames);
+    }
+
     public List<String> getProductDescriptionTexts() {
-        List<String> productDescriptionTexts = new ArrayList<>();
-
-        for (WebElement product : driver.findElements(productDescriptions)) {
-            productDescriptionTexts.add(product.getText());
-        }
-
-        return productDescriptionTexts;
+        return getTexts(productDescriptions);
     }
 
 
     public List<String> getProductPriceTexts() {
-        List<String> productPriceTexts = new ArrayList<>();
-
-        for (WebElement product : driver.findElements(productPrices)) {
-            productPriceTexts.add(product.getText());
-        }
-
-        return productPriceTexts;
+        return getTexts(productPrices);
     }
 
 
@@ -76,26 +72,21 @@ public class ProductPage extends BasePage {
     }
 
 
+
     public void sortProductsByNameAToZ() {
-        Select select = new Select(driver.findElement(sortDropdown));
-        select.selectByValue("az");
+        selectSortOption("az");
     }
 
     public void sortProductsByNameZToA() {
-
-        Select select = new Select(driver.findElement(sortDropdown));
-        select.selectByValue("za");
+        selectSortOption("za");
     }
 
     public void sortProductsByPriceLowToHigh() {
-
-        Select select = new Select(driver.findElement(sortDropdown));
-        select.selectByValue("lohi");
+        selectSortOption("lohi");
     }
 
-    public void sortProductsByPriceHighToLow(){
-        Select select = new Select(driver.findElement(sortDropdown));
-        select.selectByValue("hilo");
+    public void sortProductsByPriceHighToLow() {
+        selectSortOption("hilo");
     }
 
     public String getCartBadgeCount() {
@@ -108,12 +99,11 @@ public class ProductPage extends BasePage {
     }
 
     public void selectProduct(String productName) {
-
         By product = By.xpath(
                 "//a[contains(@id,'title_link')][.//div[@data-test='inventory-item-name' and text()='"
                         + productName + "']]"
         );
 
-        driver.findElement(product).click();
+        click(product);
     }
 }

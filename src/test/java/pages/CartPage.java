@@ -3,8 +3,6 @@ package pages;
 import base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CartPage extends BasePage {
@@ -56,14 +54,7 @@ public class CartPage extends BasePage {
     }
 
     public List<String> getCartProductNameTexts() {
-        List<String> productNames = new ArrayList<>();
-
-        for (WebElement product : driver.findElements(cartProductName)) {
-            productNames.add(product.getText());
-        }
-
-        return productNames;
+        return getTexts(cartProductName);
     }
-
 }
 

@@ -1,8 +1,13 @@
+package tests;
+
 import base.BaseTest;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.CartPage;
 import pages.ProductPage;
+import utils.JsonDataReader;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,15 +17,21 @@ public class CartPageTest extends BaseTest {
     @Test(description = "Verify the selected product is displayed in the cart")
     public void verifyProductIsDisplayedInCart() {
 
+        JsonDataReader reader = new JsonDataReader();
+        JsonNode testData = reader.readJson("verifyProductIsDisplayedInCart.json");
+
         loginAsValidUser();
+
         ProductPage productPage = new ProductPage(driver);
         productPage.clickBikeLight();
         productPage.addToCart();
         productPage.clickShoppingCart();
-        CartPage cartPage = new CartPage(driver);
-        Assert.assertEquals(
-                cartPage.getCartProductName(),productData.get("bikeLight").asText()
 
+        CartPage cartPage = new CartPage(driver);
+
+        Assert.assertEquals(
+                cartPage.getCartProductName(),
+                testData.get("bikeLight").asText()
         );
     }
 
@@ -28,19 +39,8 @@ public class CartPageTest extends BaseTest {
     @Test(description = "Verify the product price is displayed in the cart")
     public void verifyProductPriceIsDisplayedInCart() {
 
-        loginAsValidUser();
-        ProductPage productPage = new ProductPage(driver);
-        productPage.clickBikeLight();
-        productPage.addToCart();   // Add the product to the cart
-        productPage.clickShoppingCart(); // Open the shopping cart
-        CartPage cartPage = new CartPage(driver);// Create CartPage object
-        Assert.assertEquals(
-                cartPage.getCartProductPrice(),productData.get("bikeLightPrice").asText()
-        );
-    }
-
-    @Test(description = "Verify the product description is displayed in the cart")
-    public void verifyProductDescriptionIsDisplayedInCart() {
+        JsonDataReader reader = new JsonDataReader();
+        JsonNode testData = reader.readJson("verifyProductPriceIsDisplayedInCart.json");
 
         loginAsValidUser();
 
@@ -51,8 +51,31 @@ public class CartPageTest extends BaseTest {
 
         CartPage cartPage = new CartPage(driver);
 
-        Assert.assertEquals(cartPage.getCartProductDescription(),productData.get("bikeLightDescription").asText());
+        Assert.assertEquals(
+                cartPage.getCartProductPrice(),
+                testData.get("bikeLightPrice").asText()
+        );
+    }
 
+    @Test(description = "Verify the product description is displayed in the cart")
+    public void verifyProductDescriptionIsDisplayedInCart() {
+
+        JsonDataReader reader = new JsonDataReader();
+        JsonNode testData = reader.readJson("verifyProductDescriptionIsDisplayedInCart.json");
+
+        loginAsValidUser();
+
+        ProductPage productPage = new ProductPage(driver);
+        productPage.clickBikeLight();
+        productPage.addToCart();
+        productPage.clickShoppingCart();
+
+        CartPage cartPage = new CartPage(driver);
+
+        Assert.assertEquals(
+                cartPage.getCartProductDescription(),
+                testData.get("bikeLightDescription").asText()
+        );
     }
 
     @Test(description = "Verify user can remove a product from the cart")
@@ -112,34 +135,42 @@ public class CartPageTest extends BaseTest {
     @Test(description = "Verify multiple products are displayed in the cart")
     public void verifyMultipleProductsAreDisplayedInCart() {
 
+        JsonDataReader reader = new JsonDataReader();
+        JsonNode testData = reader.readJson("verifyMultipleProductsAreDisplayedInCart.json");
+
         loginAsValidUser();
 
         ProductPage productPage = new ProductPage(driver);
-        productPage.selectProduct(productData.get("bikeLight").asText());
+
+        productPage.selectProduct(testData.get("bikeLight").asText());
         productPage.addToCart();
+
         productPage.clickBackToProducts();
-        productPage.selectProduct(productData.get("backpack").asText());
+
+        productPage.selectProduct(testData.get("backpack").asText());
         productPage.addToCart();
+
         productPage.clickBackToProducts();
-        productPage.selectProduct(productData.get("boltTShirt").asText());
+
+        productPage.selectProduct(testData.get("boltTShirt").asText());
         productPage.addToCart();
+
         productPage.clickShoppingCart();
 
-
         CartPage cartPage = new CartPage(driver);
+
         List<String> actualProductNames = cartPage.getCartProductNameTexts();
 
         Assert.assertEquals(
                 actualProductNames.size(),
-                productData.get("expectedCartProductCount").asInt()
+                testData.get("expectedCartProductCount").asInt()
         );
 
         List<String> expectedProductNames = Arrays.asList(
-                productData.get("bikeLight").asText(),
-                productData.get("backpack").asText(),
-                productData.get("boltTShirt").asText()
+                testData.get("bikeLight").asText(),
+                testData.get("backpack").asText(),
+                testData.get("boltTShirt").asText()
         );
-
 
         Assert.assertEquals(actualProductNames, expectedProductNames);
     }
