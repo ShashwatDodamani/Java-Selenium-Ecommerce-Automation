@@ -64,7 +64,7 @@ public class CheckoutOverviewPage extends BasePage {
 
     public void clickFinish() {
 
-        clickWhenReady(finishButton);
+        click(finishButton);
     }
 
     public void clickCancel() {

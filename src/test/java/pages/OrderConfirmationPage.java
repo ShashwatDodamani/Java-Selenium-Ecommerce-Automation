@@ -20,37 +20,37 @@ public class OrderConfirmationPage extends BasePage{
 
 
     public String getAppLogo() {
-        return getTextWhenVisible(appLogo);
+        return getText(appLogo);
     }
 
     public String getPageTitle() {
-        return getTextWhenVisible(pageTitle);
+        return getText(pageTitle);
     }
 
     public boolean isPonyExpressDisplayed() {
            return isVisible(ponyExpress);
         }
     public String getCompleteHeader() {
-        return getTextWhenVisible(completeHeader);
+        return getText(completeHeader);
     }
 
     public String getCompleteText() {
-            return getTextWhenVisible(completeText);
+            return getText(completeText);
         }
 
     public String getBackHomeButtonText() {
-        return getTextWhenVisible(backHomeButton);
+        return getText(backHomeButton);
     }
 
     public String getGeneratePdfButtonText() {
-            return getTextWhenVisible(generatePdfButton);
+            return getText(generatePdfButton);
         }
 
     public void clickBackHome() {
-        clickWhenReady(backHomeButton);
+        click(backHomeButton);
     }
 
     public void clickGeneratePdfOrder() {
-        clickWhenReady(generatePdfButton);
+        click(generatePdfButton);
     }
     }

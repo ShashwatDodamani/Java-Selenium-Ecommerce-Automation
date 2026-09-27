@@ -2,10 +2,13 @@ package base;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BasePage {
 
@@ -32,16 +35,21 @@ public class BasePage {
         ).getText();
     }
 
-    public void clickWhenReady(By locator) {
+    public List<String> getTexts(By locator) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
+
+        return wait.until(driver -> {
+            List<String> texts = new ArrayList<>();
+
+            for (WebElement element : driver.findElements(locator)) {
+                texts.add(element.getText());
+            }
+
+            return texts;
+        });
     }
-    public String getTextWhenVisible(By locator) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        return wait.until(
-                ExpectedConditions.visibilityOfElementLocated(locator)
-        ).getText();
-    }
+
+
     public boolean isVisible(By locator) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         return wait.until(

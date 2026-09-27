@@ -1,10 +1,12 @@
 package tests;
 
 import base.BaseTest;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.*;
 import utils.ConfigReader;
+import utils.JsonDataReader;
 
 public class CheckoutOverviewPageTest extends BaseTest {
 
@@ -14,10 +16,13 @@ public class CheckoutOverviewPageTest extends BaseTest {
     @Test(description = "Verify the selected product is displayed on the Checkout Overview page")
     public void verifySelectedProductIsDisplayedOnCheckoutOverview() {
 
+        JsonDataReader reader = new JsonDataReader();
+        JsonNode testData = reader.readJson("verifySelectedProductIsDisplayedOnCheckoutOverview.json");
+
         loginAsValidUser();
 
         ProductPage productPage = new ProductPage(driver);
-        productPage.selectProduct(productData.get("bikeLight").asText());
+        productPage.selectProduct(testData.get("bikeLight").asText());
         productPage.addToCart();
         productPage.clickShoppingCart();
 
@@ -25,9 +30,9 @@ public class CheckoutOverviewPageTest extends BaseTest {
         cartPage.clickCheckout();
 
         CheckoutPage checkoutPage = new CheckoutPage(driver);
-        checkoutPage.enterFirstName(checkoutData.get("firstName").asText());
-        checkoutPage.enterLastName(checkoutData.get("lastName").asText());
-        checkoutPage.enterPostalCode(checkoutData.get("postalCode").asText());
+        checkoutPage.enterFirstName(testData.get("firstName").asText());
+        checkoutPage.enterLastName(testData.get("lastName").asText());
+        checkoutPage.enterPostalCode(testData.get("postalCode").asText());
         checkoutPage.clickContinue();
 
         CheckoutOverviewPage overviewPage =
@@ -35,7 +40,7 @@ public class CheckoutOverviewPageTest extends BaseTest {
 
         Assert.assertEquals(
                 overviewPage.getProductName(),
-                productData.get("bikeLight").asText()
+                testData.get("bikeLight").asText()
         );
     }
 
@@ -43,10 +48,13 @@ public class CheckoutOverviewPageTest extends BaseTest {
     @Test(description = "Verify product name, description, and price are displayed correctly on the Checkout Overview page")
     public void verifyProductDetailsOnCheckoutOverview() {
 
+        JsonDataReader reader = new JsonDataReader();
+        JsonNode testData = reader.readJson("verifyProductDetailsOnCheckoutOverview.json");
+
         loginAsValidUser();
 
         ProductPage productPage = new ProductPage(driver);
-        productPage.selectProduct(productData.get("bikeLight").asText());
+        productPage.selectProduct(testData.get("bikeLight").asText());
         productPage.addToCart();
         productPage.clickShoppingCart();
 
@@ -54,9 +62,9 @@ public class CheckoutOverviewPageTest extends BaseTest {
         cartPage.clickCheckout();
 
         CheckoutPage checkoutPage = new CheckoutPage(driver);
-        checkoutPage.enterFirstName(checkoutData.get("firstName").asText());
-        checkoutPage.enterLastName(checkoutData.get("lastName").asText());
-        checkoutPage.enterPostalCode(checkoutData.get("postalCode").asText());
+        checkoutPage.enterFirstName(testData.get("firstName").asText());
+        checkoutPage.enterLastName(testData.get("lastName").asText());
+        checkoutPage.enterPostalCode(testData.get("postalCode").asText());
         checkoutPage.clickContinue();
 
         CheckoutOverviewPage overviewPage =
@@ -64,27 +72,30 @@ public class CheckoutOverviewPageTest extends BaseTest {
 
         Assert.assertEquals(
                 overviewPage.getProductName(),
-                productData.get("bikeLight").asText()
+                testData.get("bikeLight").asText()
         );
 
         Assert.assertEquals(
                 overviewPage.getProductDescription(),
-                productData.get("bikeLightDescription").asText()
+                testData.get("bikeLightDescription").asText()
         );
 
         Assert.assertEquals(
                 overviewPage.getProductPrice(),
-                productData.get("bikeLightPrice").asText()
+                testData.get("bikeLightPrice").asText()
         );
     }
 
     @Test(description = "Verify payment and shipping information are displayed correctly")
     public void verifyPaymentAndShippingInformation() {
 
+        JsonDataReader reader = new JsonDataReader();
+        JsonNode testData = reader.readJson("verifyPaymentAndShippingInformation.json");
+
         loginAsValidUser();
 
         ProductPage productPage = new ProductPage(driver);
-        productPage.selectProduct(productData.get("bikeLight").asText());
+        productPage.selectProduct(testData.get("bikeLight").asText());
         productPage.addToCart();
         productPage.clickShoppingCart();
 
@@ -92,9 +103,9 @@ public class CheckoutOverviewPageTest extends BaseTest {
         cartPage.clickCheckout();
 
         CheckoutPage checkoutPage = new CheckoutPage(driver);
-        checkoutPage.enterFirstName(checkoutData.get("firstName").asText());
-        checkoutPage.enterLastName(checkoutData.get("lastName").asText());
-        checkoutPage.enterPostalCode(checkoutData.get("postalCode").asText());
+        checkoutPage.enterFirstName(testData.get("firstName").asText());
+        checkoutPage.enterLastName(testData.get("lastName").asText());
+        checkoutPage.enterPostalCode(testData.get("postalCode").asText());
         checkoutPage.clickContinue();
 
         CheckoutOverviewPage overviewPage =
@@ -102,22 +113,25 @@ public class CheckoutOverviewPageTest extends BaseTest {
 
         Assert.assertEquals(
                 overviewPage.getPaymentInformation(),
-                orderData.get("paymentInformation").asText()
+                testData.get("paymentInformation").asText()
         );
 
         Assert.assertEquals(
                 overviewPage.getShippingInformation(),
-                orderData.get("shippingInformation").asText()
+                testData.get("shippingInformation").asText()
         );
     }
 
     @Test(description = "Verify order subtotal, tax, and total are calculated correctly")
     public void verifyOrderTotalCalculation() {
 
+        JsonDataReader reader = new JsonDataReader();
+        JsonNode testData = reader.readJson("verifyOrderTotalCalculation.json");
+
         loginAsValidUser();
 
         ProductPage productPage = new ProductPage(driver);
-        productPage.selectProduct(productData.get("bikeLight").asText());
+        productPage.selectProduct(testData.get("bikeLight").asText());
         productPage.addToCart();
         productPage.clickShoppingCart();
 
@@ -125,16 +139,18 @@ public class CheckoutOverviewPageTest extends BaseTest {
         cartPage.clickCheckout();
 
         CheckoutPage checkoutPage = new CheckoutPage(driver);
-        checkoutPage.enterFirstName(checkoutData.get("firstName").asText());
-        checkoutPage.enterLastName(checkoutData.get("lastName").asText());
-        checkoutPage.enterPostalCode(checkoutData.get("postalCode").asText());
+        checkoutPage.enterFirstName(testData.get("firstName").asText());
+        checkoutPage.enterLastName(testData.get("lastName").asText());
+        checkoutPage.enterPostalCode(testData.get("postalCode").asText());
         checkoutPage.clickContinue();
 
         CheckoutOverviewPage overviewPage =
                 new CheckoutOverviewPage(driver);
+
         String itemTotalText = overviewPage.getItemTotal();
         String taxText = overviewPage.getTax();
         String totalText = overviewPage.getTotal();
+
         double itemTotal = Double.parseDouble(
                 itemTotalText.replace("Item total: $", "")
         );
@@ -155,10 +171,13 @@ public class CheckoutOverviewPageTest extends BaseTest {
     @Test(description = "Verify user can complete the order using the Finish button")
     public void verifyOrderCanBeCompletedUsingFinishButton() {
 
+        JsonDataReader reader = new JsonDataReader();
+        JsonNode testData = reader.readJson("verifyOrderCanBeCompletedUsingFinishButton.json");
+
         loginAsValidUser();
 
         ProductPage productPage = new ProductPage(driver);
-        productPage.selectProduct(productData.get("bikeLight").asText());
+        productPage.selectProduct(testData.get("bikeLight").asText());
         productPage.addToCart();
         productPage.clickShoppingCart();
 
@@ -166,11 +185,12 @@ public class CheckoutOverviewPageTest extends BaseTest {
         cartPage.clickCheckout();
 
         CheckoutPage checkoutPage = new CheckoutPage(driver);
-        checkoutPage.enterFirstName(checkoutData.get("firstName").asText());
-        checkoutPage.enterLastName(checkoutData.get("lastName").asText());
-        checkoutPage.enterPostalCode(checkoutData.get("postalCode").asText());
+        checkoutPage.enterFirstName(testData.get("firstName").asText());
+        checkoutPage.enterLastName(testData.get("lastName").asText());
+        checkoutPage.enterPostalCode(testData.get("postalCode").asText());
 
         checkoutPage.clickContinue();
+
         CheckoutOverviewPage overviewPage =
                 new CheckoutOverviewPage(driver);
 
@@ -181,14 +201,16 @@ public class CheckoutOverviewPageTest extends BaseTest {
                 configReader.getProperty("baseUrl") + "checkout-complete.html"
         );
     }
-
     @Test(description = "Verify the Cancel button returns the user to the Products page")
     public void verifyCancelButtonReturnsToCart() {
+
+        JsonDataReader reader = new JsonDataReader();
+        JsonNode testData = reader.readJson("verifyCancelButtonReturnsToCart.json");
 
         loginAsValidUser();
 
         ProductPage productPage = new ProductPage(driver);
-        productPage.selectProduct(productData.get("bikeLight").asText());
+        productPage.selectProduct(testData.get("bikeLight").asText());
         productPage.addToCart();
         productPage.clickShoppingCart();
 
@@ -196,13 +218,14 @@ public class CheckoutOverviewPageTest extends BaseTest {
         cartPage.clickCheckout();
 
         CheckoutPage checkoutPage = new CheckoutPage(driver);
-        checkoutPage.enterFirstName(checkoutData.get("firstName").asText());
-        checkoutPage.enterLastName(checkoutData.get("lastName").asText());
-        checkoutPage.enterPostalCode(checkoutData.get("postalCode").asText());
+        checkoutPage.enterFirstName(testData.get("firstName").asText());
+        checkoutPage.enterLastName(testData.get("lastName").asText());
+        checkoutPage.enterPostalCode(testData.get("postalCode").asText());
         checkoutPage.clickContinue();
 
         CheckoutOverviewPage overviewPage =
                 new CheckoutOverviewPage(driver);
+
         overviewPage.clickCancel();
 
         Assert.assertEquals(

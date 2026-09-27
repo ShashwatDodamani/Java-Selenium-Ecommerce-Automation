@@ -1,11 +1,13 @@
 package tests;
 
 import base.BaseTest;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.CartPage;
 import pages.CheckoutPage;
 import pages.ProductPage;
+import utils.JsonDataReader;
 
 public class CheckoutPageTest extends BaseTest {
 
@@ -13,10 +15,13 @@ public class CheckoutPageTest extends BaseTest {
     @Test(description = "Verify user can navigate to the Checkout: Your Information page")
     public void verifyCheckoutPageNavigation() {
 
+        JsonDataReader reader = new JsonDataReader();
+        JsonNode testData = reader.readJson("verifyCheckoutPageNavigation.json");
+
         loginAsValidUser();
 
         ProductPage productPage = new ProductPage(driver);
-        productPage.selectProduct(productData.get("bikeLight").asText());
+        productPage.selectProduct(testData.get("bikeLight").asText());
         productPage.addToCart();
         productPage.clickShoppingCart();
 
@@ -27,33 +32,36 @@ public class CheckoutPageTest extends BaseTest {
 
         Assert.assertEquals(
                 checkoutPage.getCheckoutInformationTitle(),
-                expectedMessages.get("checkoutInformationTitle").asText()
+                testData.get("checkoutInformationTitle").asText()
         );
     }
 
     @Test(description = "Verify user can enter valid checkout information and continue")
     public void verifyValidCheckoutInformationCanBeEntered() {
 
+        JsonDataReader reader = new JsonDataReader();
+        JsonNode testData = reader.readJson("verifyValidCheckoutInformationCanBeEntered.json");
+
         loginAsValidUser();
 
         ProductPage productPage = new ProductPage(driver);
-        productPage.selectProduct(productData.get("bikeLight").asText());
+        productPage.selectProduct(testData.get("bikeLight").asText());
         productPage.addToCart();
         productPage.clickShoppingCart();
 
         CartPage cartPage = new CartPage(driver);
-
         cartPage.clickCheckout();
+
         CheckoutPage checkoutPage = new CheckoutPage(driver);
 
-        checkoutPage.enterFirstName(checkoutData.get("firstName").asText());
-        checkoutPage.enterLastName(checkoutData.get("lastName").asText());
-        checkoutPage.enterPostalCode(checkoutData.get("postalCode").asText());
+        checkoutPage.enterFirstName(testData.get("firstName").asText());
+        checkoutPage.enterLastName(testData.get("lastName").asText());
+        checkoutPage.enterPostalCode(testData.get("postalCode").asText());
         checkoutPage.clickContinue();
 
         Assert.assertEquals(
                 checkoutPage.getCheckoutOverviewTitle(),
-                expectedMessages.get("checkoutOverviewTitle").asText()
+                testData.get("checkoutOverviewTitle").asText()
         );
     }
 
@@ -61,9 +69,13 @@ public class CheckoutPageTest extends BaseTest {
     @Test(description = "Verify validation message is displayed when first name is empty")
     public void verifyCheckoutFailsWhenFirstNameIsEmpty() {
 
+        JsonDataReader reader = new JsonDataReader();
+        JsonNode testData = reader.readJson("verifyCheckoutFailsWhenFirstNameIsEmpty.json");
+
         loginAsValidUser();
+
         ProductPage productPage = new ProductPage(driver);
-        productPage.selectProduct(productData.get("bikeLight").asText());
+        productPage.selectProduct(testData.get("bikeLight").asText());
         productPage.addToCart();
         productPage.clickShoppingCart();
 
@@ -71,23 +83,26 @@ public class CheckoutPageTest extends BaseTest {
         cartPage.clickCheckout();
 
         CheckoutPage checkoutPage = new CheckoutPage(driver);
-        checkoutPage.enterLastName(checkoutData.get("lastName").asText());
-        checkoutPage.enterPostalCode(checkoutData.get("postalCode").asText());
+        checkoutPage.enterLastName(testData.get("lastName").asText());
+        checkoutPage.enterPostalCode(testData.get("postalCode").asText());
         checkoutPage.clickContinue();
 
         Assert.assertEquals(
                 checkoutPage.getErrorMessage(),
-                expectedMessages.get("firstNameRequired").asText()
+                testData.get("firstNameRequired").asText()
         );
     }
 
     @Test(description = "Verify validation message is displayed when last name is empty")
     public void verifyCheckoutFailsWhenLastNameIsEmpty() {
 
+        JsonDataReader reader = new JsonDataReader();
+        JsonNode testData = reader.readJson("verifyCheckoutFailsWhenLastNameIsEmpty.json");
+
         loginAsValidUser();
 
         ProductPage productPage = new ProductPage(driver);
-        productPage.selectProduct(productData.get("bikeLight").asText());
+        productPage.selectProduct(testData.get("bikeLight").asText());
         productPage.addToCart();
         productPage.clickShoppingCart();
 
@@ -95,22 +110,25 @@ public class CheckoutPageTest extends BaseTest {
         cartPage.clickCheckout();
 
         CheckoutPage checkoutPage = new CheckoutPage(driver);
-        checkoutPage.enterFirstName(checkoutData.get("firstName").asText());
-        checkoutPage.enterPostalCode(checkoutData.get("postalCode").asText());
+        checkoutPage.enterFirstName(testData.get("firstName").asText());
+        checkoutPage.enterPostalCode(testData.get("postalCode").asText());
         checkoutPage.clickContinue();
 
         Assert.assertEquals(
                 checkoutPage.getErrorMessage(),
-                expectedMessages.get("lastNameRequired").asText()
+                testData.get("lastNameRequired").asText()
         );
     }
     @Test(description = "Verify validation message is displayed when postal code is empty")
     public void verifyCheckoutFailsWhenPostalCodeIsEmpty() {
 
+        JsonDataReader reader = new JsonDataReader();
+        JsonNode testData = reader.readJson("verifyCheckoutFailsWhenPostalCodeIsEmpty.json");
+
         loginAsValidUser();
 
         ProductPage productPage = new ProductPage(driver);
-        productPage.selectProduct(productData.get("bikeLight").asText());
+        productPage.selectProduct(testData.get("bikeLight").asText());
         productPage.addToCart();
         productPage.clickShoppingCart();
 
@@ -118,13 +136,13 @@ public class CheckoutPageTest extends BaseTest {
         cartPage.clickCheckout();
 
         CheckoutPage checkoutPage = new CheckoutPage(driver);
-        checkoutPage.enterFirstName(checkoutData.get("firstName").asText());
-        checkoutPage.enterLastName(checkoutData.get("lastName").asText());
+        checkoutPage.enterFirstName(testData.get("firstName").asText());
+        checkoutPage.enterLastName(testData.get("lastName").asText());
         checkoutPage.clickContinue();
 
         Assert.assertEquals(
                 checkoutPage.getErrorMessage(),
-                expectedMessages.get("postalCodeRequired").asText()
+                testData.get("postalCodeRequired").asText()
         );
     }
 }

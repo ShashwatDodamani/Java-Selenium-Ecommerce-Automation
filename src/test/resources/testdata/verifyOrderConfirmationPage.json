@@ -1,0 +1,12 @@
+{
+  "bikeLight": "Sauce Labs Bike Light",
+  "firstName": "Alex",
+  "lastName": "Test",
+  "postalCode": "0611",
+  "appLogo": "Swag Labs",
+  "orderConfirmationTitle": "Checkout: Complete!",
+  "orderConfirmationHeader": "Thank you for your order!",
+  "orderDispatchMessage": "Your order has been dispatched, and will arrive just as fast as the pony can get there!",
+  "backHomeButton": "Back Home",
+  "generatePdfOrderButton": "Generate PDF order"
+}

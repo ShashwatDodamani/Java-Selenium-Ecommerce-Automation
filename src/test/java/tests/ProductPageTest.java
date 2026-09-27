@@ -1,10 +1,13 @@
 package tests;
 
 import base.BaseTest;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.CartPage;
 import pages.ProductPage;
+import utils.JsonDataReader;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -61,15 +64,29 @@ public class ProductPageTest extends BaseTest {
 
     @Test(description = "Verify user can select the Sauce Labs Bike Light product")
     public void selectBikeLightTest() {
+
+        JsonDataReader reader = new JsonDataReader();
+        JsonNode testData = reader.readJson("selectBikeLightTest.json");
+
         loginAsValidUser();
 
         ProductPage productPage = new ProductPage(driver);
         productPage.clickBikeLight();
-        Assert.assertEquals(productPage.productDetailsTitle(),productData.get("bikeLight").asText());
+
+        Assert.assertEquals(
+                productPage.productDetailsTitle(),
+                testData.get("bikeLight").asText()
+        );
+
         productPage.addToCart();
         productPage.clickShoppingCart();
+
         CartPage cartpage = new CartPage(driver);
-        Assert.assertEquals(cartpage.getCartProductName(),productData.get("bikeLight").asText());
+
+        Assert.assertEquals(
+                cartpage.getCartProductName(),
+                testData.get("bikeLight").asText()
+        );
     }
 
     @Test(description = "Verify user can sort products by name from A to Z")
@@ -160,12 +177,20 @@ public class ProductPageTest extends BaseTest {
     @Test(description = "Verify cart badge count updates when a product is added")
     public void verifyCartBadgeUpdatesAfterAddingProduct() {
 
+        JsonDataReader reader = new JsonDataReader();
+        JsonNode testData = reader.readJson("cartBadgeUpdatesAfterAddingProduct.json");
 
         loginAsValidUser();
+
         ProductPage productPage = new ProductPage(driver);
         productPage.clickBikeLight();
         productPage.addToCart();
+
         String cartBadgeCount = productPage.getCartBadgeCount();
-        Assert.assertEquals(cartBadgeCount, productData.get("expectedCartBadgeCount").asText());
+
+        Assert.assertEquals(
+                cartBadgeCount,
+                testData.get("expectedCartBadgeCount").asText()
+        );
     }
 }
