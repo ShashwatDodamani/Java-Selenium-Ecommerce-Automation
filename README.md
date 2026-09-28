@@ -1,8 +1,8 @@
 # Java Selenium E-commerce Automation Framework
 
-A maintainable **UI test automation framework built with Java, Selenium WebDriver, TestNG, and Maven**, designed to automate the complete e-commerce workflow of the [SauceDemo](https://www.saucedemo.com/) application.
+A maintainable UI test automation framework built with **Java, Selenium WebDriver, TestNG, and Maven**, designed to automate the complete e-commerce workflow of the [SauceDemo](https://www.saucedemo.com/) application.
 
-The framework follows the **Page Object Model (POM)** design pattern and includes reusable components for browser management, test data, configuration, screenshots, reporting, and CI execution.
+The framework follows the **Page Object Model (POM)** design pattern and includes reusable components for browser management, configuration, test data management, reporting, screenshots, cross-browser execution, and Continuous Integration.
 
 ---
 
@@ -14,49 +14,51 @@ The framework automates the following user journey:
 
 **Login → Products → Cart → Checkout → Checkout Overview → Order Confirmation**
 
-The objective was not only to automate individual test cases, but to build a **structured, reusable, and maintainable automation framework following industry-style practices**.
+The objective was not only to automate individual test cases, but to build a structured, reusable, and maintainable automation framework using industry-style QA automation practices.
 
-### Key highlights
+### Key Highlights
 
 * 40 automated test cases
 * Java + Selenium WebDriver
 * TestNG test framework
-* Maven project structure
+* Maven build and dependency management
 * Page Object Model (POM)
 * Reusable `BasePage` and `BaseTest`
 * `DriverFactory` for browser management
-* External JSON test data
+* Individual JSON test-data files
 * External configuration using `config.properties`
-* Screenshot utility
+* Jackson for JSON data processing
 * ExtentReports integration
-* Chrome, Edge and Firefox support
+* Screenshot capture for failed tests
+* Chrome, Edge, and Firefox support
+* Git and GitHub version control
 * GitHub Actions CI pipeline
 * 40/40 tests passing in CI
 
 ---
 
-# 🛠️ Tech Stack
+## 🛠️ Tech Stack
 
-| Technology                  | Purpose                           |
-| --------------------------- | --------------------------------- |
-| **Java**                    | Programming language              |
-| **Selenium WebDriver**      | Web UI automation                 |
-| **TestNG**                  | Test execution and assertions     |
-| **Maven**                   | Dependency and build management   |
-| **Page Object Model**       | Maintainable framework design     |
-| **Jackson**                 | Reading JSON test data            |
-| **ExtentReports**           | Test execution reporting          |
-| **Git & GitHub**            | Version control and collaboration |
-| **GitHub Actions**          | Continuous Integration            |
-| **Chrome / Edge / Firefox** | Cross-browser execution           |
+| Technology              | Purpose                         |
+| ----------------------- | ------------------------------- |
+| Java                    | Programming language            |
+| Selenium WebDriver      | Web UI automation               |
+| TestNG                  | Test execution and assertions   |
+| Maven                   | Dependency and build management |
+| Page Object Model       | Maintainable framework design   |
+| Jackson                 | Reading JSON test data          |
+| ExtentReports           | Test execution reporting        |
+| Git & GitHub            | Version control                 |
+| GitHub Actions          | Continuous Integration          |
+| Chrome / Edge / Firefox | Cross-browser testing           |
 
 ---
 
-# 🧪 Application Under Test
+## 🧪 Application Under Test
 
 **SauceDemo** is a sample e-commerce web application used for practicing and demonstrating web automation.
 
-The automation covers the main shopping workflow from authentication through order completion.
+The framework covers the main shopping workflow from authentication through order completion.
 
 ---
 
@@ -64,7 +66,7 @@ The automation covers the main shopping workflow from authentication through ord
 
 The framework currently contains **40 automated test cases**.
 
-### 🔐 Login — 8 tests
+### 🔐 Login — 8 Tests
 
 Covers:
 
@@ -73,13 +75,11 @@ Covers:
 * Invalid password
 * Invalid username and password
 * Locked-out user
-* Required field validation
-* Login error messages
-* Login behaviour and navigation
+* Empty username validation
+* Empty password validation
+* Login error messages and navigation
 
----
-
-### 🛍️ Products — 11 tests
+### 🛍️ Products — 11 Tests
 
 Covers:
 
@@ -87,67 +87,64 @@ Covers:
 * Product details
 * Product selection
 * Product sorting
-* Price sorting
 * Name sorting
+* Price sorting
 * Add product to cart
 * Cart badge validation
 * Product-related UI validations
 
----
-
-### 🛒 Cart — 7 tests
+### 🛒 Cart — 7 Tests
 
 Covers:
 
 * Cart navigation
 * Added product validation
-* Product details in cart
-* Cart item count
+* Product price validation
+* Product description validation
+* Multiple products in cart
 * Removing products
-* Cart state validation
 * Continue shopping functionality
 
----
-
-### 💳 Checkout — 5 tests
+### 💳 Checkout — 5 Tests
 
 Covers:
 
-* Checkout navigation
+* Checkout page navigation
 * Valid customer information
 * First name validation
 * Last name validation
 * Postal code validation
-* Required field validation
 
----
-
-### 📦 Checkout Overview — 6 tests
+### 📦 Checkout Overview — 6 Tests
 
 Covers:
 
 * Checkout overview page
-* Product information
-* Item price
-* Quantity
+* Selected product validation
+* Product description
+* Product price
 * Payment information
-* Order summary and total
+* Shipping information
+* Order total calculation
+* Order completion
+* Cancel navigation
 
----
-
-### ✅ Order Confirmation — 3 tests
+### ✅ Order Confirmation — 3 Tests
 
 Covers:
 
-* Order completion
-* Confirmation message
-* Post-order navigation / validation
+* Order confirmation page
+* Order confirmation message
+* Back Home navigation
+* Generate PDF order functionality
 
 ---
 
 # 🏗️ Framework Architecture
 
-The project follows the **Page Object Model (POM)** approach.
+The framework follows the **Page Object Model (POM)** design pattern.
+
+All framework and test classes are organised under `src/test/java`, keeping the automation implementation together with the test suite.
 
 ```text
 SeleniumEcommerceAutomation
@@ -157,44 +154,46 @@ SeleniumEcommerceAutomation
 │       └── maven-tests.yml
 │
 ├── src
-│   │
-│   ├── main
-│   │   └── java
-│   │       ├── base
-│   │       │   └── BasePage.java
-│   │       │
-│   │       └── pages
-│   │           ├── LoginPage.java
-│   │           ├── ProductPage.java
-│   │           ├── CartPage.java
-│   │           ├── CheckoutPage.java
-│   │           ├── CheckoutOverviewPage.java
-│   │           └── OrderConfirmationPage.java
-│   │
 │   └── test
 │       │
 │       ├── java
+│       │   │
 │       │   ├── base
+│       │   │   ├── BasePage.java
 │       │   │   └── BaseTest.java
 │       │   │
-│       │   ├── utils
-│       │   │   ├── ConfigReader.java
-│       │   │   ├── DriverFactory.java
-│       │   │   ├── JsonDataReader.java
-│       │   │   ├── ScreenshotUtil.java
-│       │   │   ├── ExtentReportManager.java
-│       │   │   └── ExtentTestListener.java
+│       │   ├── pages
+│       │   │   ├── LoginPage.java
+│       │   │   ├── ProductPage.java
+│       │   │   ├── CartPage.java
+│       │   │   ├── CheckoutPage.java
+│       │   │   ├── CheckoutOverviewPage.java
+│       │   │   └── OrderConfirmationPage.java
 │       │   │
-│       │   ├── LoginTest.java
-│       │   ├── ProductPageTest.java
-│       │   ├── CartPageTest.java
-│       │   ├── CheckoutPageTest.java
-│       │   ├── CheckoutOverviewPageTest.java
-│       │   └── OrderConfirmationPageTest.java
+│       │   ├── tests
+│       │   │   ├── LoginTest.java
+│       │   │   ├── ProductPageTest.java
+│       │   │   ├── CartPageTest.java
+│       │   │   ├── CheckoutPageTest.java
+│       │   │   ├── CheckoutOverviewPageTest.java
+│       │   │   └── OrderConfirmationPageTest.java
+│       │   │
+│       │   └── utils
+│       │       ├── ConfigReader.java
+│       │       ├── DriverFactory.java
+│       │       ├── JsonDataReader.java
+│       │       ├── ScreenshotUtil.java
+│       │       ├── ExtentReportManager.java
+│       │       └── ExtentTestListener.java
 │       │
 │       └── resources
 │           ├── testdata
-│           │   └── testData.json
+│           │   ├── validLoginTest.json
+│           │   ├── invalidUserNameAndValidPassword.json
+│           │   ├── selectBikeLightTest.json
+│           │   ├── cartBadgeUpdatesAfterAddingProduct.json
+│           │   ├── verifyProductIsDisplayedInCart.json
+│           │   └── ...
 │           │
 │           └── config
 │               └── config.properties
@@ -208,9 +207,18 @@ SeleniumEcommerceAutomation
 
 ## BasePage
 
-`BasePage` contains reusable Selenium functionality shared across page classes.
+`BasePage` contains reusable Selenium operations shared across page classes.
 
-This helps reduce duplicate Selenium code and keeps page classes focused on application-specific behaviour.
+Examples include:
+
+* Clicking elements
+* Entering text
+* Retrieving text
+* Retrieving multiple element values
+* Checking element visibility
+* Explicit wait handling
+
+This reduces duplicate Selenium code and keeps page classes focused on application-specific behaviour.
 
 ---
 
@@ -220,15 +228,15 @@ Each major application page has its own Page Object.
 
 ```text
 LoginPage
-     ↓
+    ↓
 ProductPage
-     ↓
+    ↓
 CartPage
-     ↓
+    ↓
 CheckoutPage
-     ↓
+    ↓
 CheckoutOverviewPage
-     ↓
+    ↓
 OrderConfirmationPage
 ```
 
@@ -239,28 +247,31 @@ Page classes encapsulate:
 * Navigation
 * Reusable page-level methods
 
-This makes the test classes easier to read and maintain.
+This keeps the test classes readable and separates test intent from UI implementation details.
 
 ---
 
 ## BaseTest
 
-`BaseTest` provides common test setup and teardown functionality.
+`BaseTest` provides common test lifecycle functionality.
 
 It is responsible for:
 
-* Initialising the WebDriver
+* Creating the WebDriver through `DriverFactory`
 * Opening the application
-* Loading test data
-* Providing reusable login functionality
+* Maximising the browser
+* Providing reusable valid-login functionality
 * Closing the browser after each test
-* Initialising and flushing ExtentReports
+* Initialising ExtentReports
+* Flushing the test report after execution
+
+Each test receives a **new WebDriver session**, providing test isolation and ensuring that browser/session state does not carry over between tests.
 
 ---
 
 ## DriverFactory
 
-`DriverFactory` centralises WebDriver creation.
+`DriverFactory` centralises WebDriver creation and browser configuration.
 
 The framework supports:
 
@@ -268,38 +279,63 @@ The framework supports:
 * Edge
 * Firefox
 
-The browser can be controlled through the external configuration file.
+The selected browser is controlled through the external configuration file.
 
-For GitHub Actions, Chrome is executed in **headless mode** with CI-specific options so that the tests can run reliably on the Linux runner.
+For GitHub Actions, Chrome runs in **headless mode** with CI-specific browser options so the tests can execute reliably in the Linux environment.
 
 ---
 
-## Test Data Management
+# 📂 Test Data Management
 
-Test data is maintained separately from the test implementation using JSON.
+Test data is maintained separately from the test implementation using **individual JSON files**.
 
-Example structure:
+Instead of maintaining one large shared test-data file, each test has its own JSON file where test-specific data is required.
+
+Example:
 
 ```text
-src/test/resources/testdata/testData.json
+src/test/resources/testdata/
+│
+├── validLoginTest.json
+├── invalidUserNameAndValidPassword.json
+├── invalidUserNameAndInvalidPassword.json
+├── selectBikeLightTest.json
+├── cartBadgeUpdatesAfterAddingProduct.json
+├── verifyProductIsDisplayedInCart.json
+├── verifyValidCheckoutInformationCanBeEntered.json
+└── ...
 ```
 
-This approach separates:
+Example JSON:
 
-**Test logic → Test data**
+```json
+{
+  "bikeLight": "Sauce Labs Bike Light",
+  "firstName": "Alex",
+  "lastName": "Test",
+  "postalCode": "0611"
+}
+```
 
-and makes the framework easier to maintain when test data changes.
+This approach provides **test-level data isolation**, meaning changes to one test's data file do not unintentionally affect unrelated tests.
 
-Jackson is used to read and process the JSON data.
+Jackson is used to read and process the JSON files.
 
 ---
 
-## Configuration Management
+# ⚙️ Configuration Management
 
 Environment-related configuration is maintained separately in:
 
 ```text
 src/test/resources/config/config.properties
+```
+
+Example:
+
+```properties
+baseUrl=https://www.saucedemo.com/
+browser=chrome
 ```
 
 This keeps configurable values such as the application URL and browser selection outside the test classes.
@@ -308,14 +344,15 @@ This keeps configurable values such as the application URL and browser selection
 
 # 📊 Reporting
 
-The framework integrates **ExtentReports** to provide test execution reports.
+The framework integrates **ExtentReports** to provide test execution reporting.
 
 The reporting implementation includes:
 
 * Test execution status
-* Passed / failed test information
+* Passed and failed test information
 * Test lifecycle integration
-* Screenshots for failed tests
+* Failure details
+* Screenshot integration
 
 A TestNG listener is used to integrate test execution with the reporting framework.
 
@@ -325,7 +362,7 @@ A TestNG listener is used to integrate test execution with the reporting framewo
 
 A reusable screenshot utility is included in the framework.
 
-Screenshots can be captured during test execution, particularly when a test fails, helping with:
+Screenshots can be captured when tests fail, providing useful evidence for:
 
 * Failure investigation
 * Debugging
@@ -336,17 +373,15 @@ Screenshots can be captured during test execution, particularly when a test fail
 
 # 🌐 Cross-Browser Support
 
-The framework is designed to support multiple browsers through `DriverFactory`.
+The framework supports multiple browsers through `DriverFactory`.
 
 Supported browsers:
 
-```text
-Chrome
-Edge
-Firefox
-```
+* Chrome
+* Edge
+* Firefox
 
-The framework has been validated using **Chrome, Edge and Firefox**.
+The framework has been validated using these supported browsers.
 
 ---
 
@@ -354,23 +389,23 @@ The framework has been validated using **Chrome, Edge and Firefox**.
 
 The project uses **GitHub Actions** to automatically execute the Maven test suite.
 
-Workflow:
+### CI Workflow
 
 ```text
 Code Push / Pull Request
           ↓
     GitHub Actions
           ↓
-       Maven
+         Maven
           ↓
-    Selenium Tests
+   Selenium Tests
           ↓
-      TestNG
+        TestNG
           ↓
-    Test Results
+     Test Results
 ```
 
-The CI workflow runs:
+The CI workflow executes:
 
 ```bash
 mvn clean test
@@ -379,8 +414,6 @@ mvn clean test
 Chrome runs in headless mode on the GitHub Actions Linux environment.
 
 ### CI Result
-
-**40 tests executed**
 
 ```text
 Tests run: 40
@@ -404,8 +437,6 @@ Make sure the following are installed:
 * Git
 * A supported browser
 
----
-
 ## Clone the Repository
 
 ```bash
@@ -417,8 +448,6 @@ Navigate to the project:
 ```bash
 cd Java-Selenium-Ecommerce-Automation
 ```
-
----
 
 ## Configure the Browser
 
@@ -434,8 +463,6 @@ For example:
 browser=chrome
 ```
 
----
-
 ## Run the Test Suite
 
 Run all tests using Maven:
@@ -446,9 +473,7 @@ mvn clean test
 
 ---
 
-# 📈 Test Execution
-
-Current automation coverage:
+# 📈 Test Execution Summary
 
 | Module             |  Tests |
 | ------------------ | -----: |
@@ -460,7 +485,7 @@ Current automation coverage:
 | Order Confirmation |      3 |
 | **Total**          | **40** |
 
-**Current result: 40/40 tests passing**
+**Current CI result: 40/40 tests passing**
 
 ---
 
@@ -475,16 +500,19 @@ This project demonstrates practical experience in:
 * Maven
 * Page Object Model
 * Test data management
+* Test-level JSON data isolation
 * Configuration management
 * Reusable framework components
+* Explicit wait strategies
 * Cross-browser testing
 * Test reporting
 * Screenshot capture
-* CI automation
+* Continuous Integration
 * Git and GitHub
+* GitHub Actions
 * Debugging CI-specific browser issues
 
-The framework was designed with a focus on **readability, reusability, maintainability, and realistic QA automation practices** rather than simply creating individual Selenium scripts.
+The framework was designed with a focus on **readability, reusability, maintainability, test isolation, and realistic QA automation practices** rather than simply creating individual Selenium scripts.
 
 ---
 
@@ -494,11 +522,11 @@ Potential future enhancements include:
 
 * Parallel test execution
 * Browser selection through Maven parameters
+* Data-driven testing using TestNG
 * Additional API automation
-* More comprehensive test data parameterisation
-* Enhanced reporting
+* Enhanced reporting and test evidence
 * Docker-based test execution
-* Additional CI matrix testing across browsers
+* CI browser matrix testing
 * Integration with a test management system
 
 ---
@@ -509,6 +537,4 @@ Potential future enhancements include:
 
 QA Engineer | Manual & Automation Testing | Selenium | Java | API Testing | BDD
 
-GitHub: **[@testwithAagy](https://github.com/testwithAagy)**
-
-
+GitHub: [@testwithAagy](https://github.com/testwithAagy)
