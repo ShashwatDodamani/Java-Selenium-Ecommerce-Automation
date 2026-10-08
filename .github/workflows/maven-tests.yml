@@ -7,8 +7,14 @@ on:
     branches: [ "main" ]
 
 jobs:
+
   test:
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chrome, firefox, edge]
 
     steps:
 
@@ -26,25 +32,25 @@ jobs:
         run: java -version
 
       - name: Run Maven tests
-        run: mvn clean test -Dbrowser=chrome -Dheadless=true
+        run: mvn clean test -Dbrowser=${{ matrix.browser }} -Dheadless=true
 
       - name: Upload Cucumber Reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cucumber-reports
+          name: cucumber-reports-${{ matrix.browser }}
           path: target/cucumber-reports/
 
       - name: Upload TestNG Reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: testng-reports
+          name: testng-reports-${{ matrix.browser }}
           path: target/surefire-reports/
 
       - name: Upload Extent Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: extent-report
+          name: extent-report-${{ matrix.browser }}
           path: test-output/
