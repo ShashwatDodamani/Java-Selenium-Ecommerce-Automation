@@ -191,16 +191,4 @@ public class CheckoutOverviewStepDefinitions {
 
         overviewPage.clickCancel();
     }
-
-    @Then("the Products page should be displayed")
-    public void theProductsPageShouldBeDisplayed() {
-
-        driver = DriverFactory.getDriver();
-
-        Assert.assertEquals(
-                driver.getCurrentUrl(),
-                configReader.getProperty("baseUrl")
-                        + "inventory.html"
-        );
-    }
 }
