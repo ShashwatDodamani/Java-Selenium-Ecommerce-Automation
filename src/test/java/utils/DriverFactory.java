@@ -10,10 +10,31 @@ import java.util.Map;
 
 public class DriverFactory {
 
-    public static WebDriver createDriver() {
+    private static final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+
+    public static void createDriver() {
 
         ConfigReader configReader = new ConfigReader();
-        String browser = configReader.getProperty("browser");
+
+        String browser = System.getProperty(
+                "browser",
+                configReader.getProperty("browser")
+        );
+
+        String headless = System.getProperty(
+                "headless",
+                configReader.getProperty("headless")
+        );
+
+        if (browser == null || browser.isBlank()) {
+            browser = "chrome";
+        }
+
+        if (headless == null || headless.isBlank()) {
+            headless = "false";
+        }
+
+        WebDriver webDriver;
 
         if (browser.equalsIgnoreCase("chrome")) {
 
@@ -27,24 +48,47 @@ public class DriverFactory {
                     )
             );
 
-            // Use headless Chrome only when running in GitHub Actions
-            if (System.getenv("GITHUB_ACTIONS") != null) {
-                options.addArguments("--headless");
+            if (Boolean.parseBoolean(headless)
+                    || System.getenv("GITHUB_ACTIONS") != null) {
+
+                options.addArguments("--headless=new");
                 options.addArguments("--no-sandbox");
                 options.addArguments("--disable-dev-shm-usage");
+                options.addArguments("--window-size=1920,1080");
             }
 
-            return new ChromeDriver(options);
+            webDriver = new ChromeDriver(options);
+
+        } else if (browser.equalsIgnoreCase("firefox")) {
+
+            webDriver = new FirefoxDriver();
+
+        } else if (browser.equalsIgnoreCase("edge")) {
+
+            webDriver = new EdgeDriver();
+
+        } else {
+
+            throw new RuntimeException(
+                    "Unsupported browser: " + browser
+            );
         }
 
-        if (browser.equalsIgnoreCase("firefox")) {
-            return new FirefoxDriver();
-        }
-        if (browser.equalsIgnoreCase("edge")) {
-            return new EdgeDriver();
-        }
+        driver.set(webDriver);
+    }
 
-        throw new RuntimeException("Unsupported browser: " + browser);
+    public static WebDriver getDriver() {
 
+        return driver.get();
+    }
+
+    public static void quitDriver() {
+
+        WebDriver webDriver = driver.get();
+
+        if (webDriver != null) {
+            webDriver.quit();
+            driver.remove();
+        }
     }
 }

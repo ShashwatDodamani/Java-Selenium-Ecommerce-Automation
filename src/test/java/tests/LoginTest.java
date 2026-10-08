@@ -1,164 +1,132 @@
 package tests;
 
 import base.BaseTest;
-import com.fasterxml.jackson.databind.JsonNode;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.LoginPage;
-import utils.JsonDataReader;
-
 
 public class LoginTest extends BaseTest {
 
+    private static final String VALID_USERNAME = "standard_user";
+    private static final String VALID_PASSWORD = "secret_sauce";
 
     @Test(description = "Verify valid user can log in successfully")
-    public void validLoginTest(){
-        JsonDataReader reader = new JsonDataReader();
-        JsonNode testData = reader.readJson("validLoginTest.json");
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.enterUsername(testData.get("username").asText()
-        );
-        loginPage.enterPassword(
-                testData.get("password").asText()
-        );
-        loginPage.clickLogin();
-        Assert.assertEquals(
-                loginPage.getProductTitle(),testData.get("expectedProductTitle").asText()
-        );
+    public void validLoginTest() {
 
+        LoginPage loginPage = new LoginPage(driver);
+
+        loginPage.enterUsername(VALID_USERNAME);
+        loginPage.enterPassword(VALID_PASSWORD);
+        loginPage.clickLogin();
+
+        Assert.assertEquals(
+                loginPage.getProductTitle(),
+                "Products"
+        );
     }
 
     @Test(description = "Verify login fails with an invalid username and valid password")
-    public void invalidUserNameAndValidPassword(){
+    public void invalidUserNameAndValidPassword() {
 
-        JsonDataReader reader = new JsonDataReader();
-        JsonNode testData = reader.readJson("invalidUserNameAndValidPassword.json");
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.enterUsername(
-                testData.get("username").asText()
-        );
-        loginPage.enterPassword(
-                testData.get("password").asText()
-        );
+
+        loginPage.enterUsername("invalid_user");
+        loginPage.enterPassword(VALID_PASSWORD);
         loginPage.clickLogin();
+
         Assert.assertEquals(
                 loginPage.getLoginErrorMessage(),
-                testData.get("expectedErrorMessage").asText()
+                "Epic sadface: Username and password do not match any user in this service"
         );
     }
 
     @Test(description = "Verify login fails with a valid username and invalid password")
-    public void validUserNameAndInvalidPassword(){
+    public void validUserNameAndInvalidPassword() {
 
-        JsonDataReader reader = new JsonDataReader();
-        JsonNode testData = reader.readJson("validUserNameAndInvalidPassword.json");
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.enterUsername(
-                testData.get("username").asText()
-        );
-        loginPage.enterPassword(
-                testData.get("password").asText()
-        );
+
+        loginPage.enterUsername(VALID_USERNAME);
+        loginPage.enterPassword("invalid_password");
         loginPage.clickLogin();
+
         Assert.assertEquals(
                 loginPage.getLoginErrorMessage(),
-                testData.get("expectedErrorMessage").asText()
+                "Epic sadface: Username and password do not match any user in this service"
         );
     }
 
     @Test(description = "Verify login fails with an invalid username and invalid password")
-    public void invalidUserNameAndInvalidPassword(){
+    public void invalidUserNameAndInvalidPassword() {
 
-        JsonDataReader reader = new JsonDataReader();
-        JsonNode testData = reader.readJson("invalidUserNameAndInvalidPassword.json");
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.enterUsername(
-                testData.get("username").asText()
-        );
-        loginPage.enterPassword(
-                testData.get("password").asText()
-        );
+
+        loginPage.enterUsername("invalid_user");
+        loginPage.enterPassword("invalid_password");
         loginPage.clickLogin();
+
         Assert.assertEquals(
                 loginPage.getLoginErrorMessage(),
-                testData.get("expectedErrorMessage").asText()
+                "Epic sadface: Username and password do not match any user in this service"
         );
     }
 
     @Test(description = "Verify validation message is displayed when username is empty")
-    public void emptyUserNameAndValidPassword(){
+    public void emptyUserNameAndValidPassword() {
 
-        JsonDataReader reader = new JsonDataReader();
-        JsonNode testData = reader.readJson("emptyUserNameAndValidPassword.json");
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.enterUsername(
-                testData.get("username").asText()
-        );
-        loginPage.enterPassword(
-                testData.get("password").asText()
-        );
+
+        loginPage.enterUsername("");
+        loginPage.enterPassword(VALID_PASSWORD);
         loginPage.clickLogin();
+
         Assert.assertEquals(
                 loginPage.getLoginErrorMessage(),
-                testData.get("expectedErrorMessage").asText()
+                "Epic sadface: Username is required"
         );
     }
 
     @Test(description = "Verify validation message is displayed when password is empty")
-    public void validUserNameAndEmptyPassword(){
+    public void validUserNameAndEmptyPassword() {
 
-        JsonDataReader reader = new JsonDataReader();
-        JsonNode testData = reader.readJson("validUserNameAndEmptyPassword.json");
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.enterUsername(
-                testData.get("username").asText()
-        );
-        loginPage.enterPassword(
-                testData.get("password").asText()
-        );
+
+        loginPage.enterUsername(VALID_USERNAME);
+        loginPage.enterPassword("");
         loginPage.clickLogin();
+
         Assert.assertEquals(
                 loginPage.getLoginErrorMessage(),
-                testData.get("expectedErrorMessage").asText()
+                "Epic sadface: Password is required"
         );
     }
 
     @Test(description = "Verify username required message is displayed when both username and password are empty")
-    public void emptyUserNameAndEmptyPassword(){
+    public void emptyUserNameAndEmptyPassword() {
 
-        JsonDataReader reader = new JsonDataReader();
-        JsonNode testData = reader.readJson("emptyUserNameAndEmptyPassword.json");
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.enterUsername(
-                testData.get("username").asText()
-        );
-        loginPage.enterPassword(
-                testData.get("password").asText()
-        );
+
+        loginPage.enterUsername("");
+        loginPage.enterPassword("");
         loginPage.clickLogin();
+
         Assert.assertEquals(
                 loginPage.getLoginErrorMessage(),
-                testData.get("expectedErrorMessage").asText()
+                "Epic sadface: Username is required"
         );
     }
 
     @Test(description = "Verify locked out user cannot log in")
     public void lockedOutUserTest() {
 
-        JsonDataReader reader = new JsonDataReader();
-        JsonNode testData = reader.readJson("lockedOutUserTest.json");
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.enterUsername(
-                testData.get("username").asText()
-        );
-        loginPage.enterPassword(
-                testData.get("password").asText()
-        );
+
+        loginPage.enterUsername("locked_out_user");
+        loginPage.enterPassword(VALID_PASSWORD);
         loginPage.clickLogin();
+
         Assert.assertEquals(
                 loginPage.getLoginErrorMessage(),
-                testData.get("expectedErrorMessage").asText()
+                "Epic sadface: Sorry, this user has been locked out."
         );
     }
-
 }

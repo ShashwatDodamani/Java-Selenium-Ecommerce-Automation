@@ -1,6 +1,7 @@
 package utils;
 
 import com.aventstack.extentreports.ExtentTest;
+import org.openqa.selenium.WebDriver;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
@@ -32,12 +33,17 @@ public class ExtentTestListener implements ITestListener {
 
         test.fail(result.getThrowable());
 
-        String screenshot = ScreenshotUtil.captureScreenshot(
-                ((base.BaseTest) result.getInstance()).driver,
-                result.getMethod().getMethodName()
-        );
+        WebDriver driver = DriverFactory.getDriver();
 
-        test.addScreenCaptureFromBase64String(screenshot);
+        if (driver != null) {
+
+            String screenshot = ScreenshotUtil.captureScreenshot(
+                    driver,
+                    result.getMethod().getMethodName()
+            );
+
+            test.addScreenCaptureFromBase64String(screenshot);
+        }
     }
 
     @Override

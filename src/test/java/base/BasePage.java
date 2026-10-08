@@ -13,35 +13,44 @@ import java.util.List;
 public class BasePage {
 
     protected WebDriver driver;
-    public BasePage(WebDriver driver){
+    protected WebDriverWait wait;
+
+    public BasePage(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     public void click(By locator) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
+        wait.until(
+                ExpectedConditions.elementToBeClickable(locator)
+        ).click();
     }
 
     public void enterText(By locator, String text) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(locator))
-                .sendKeys(text);
+        wait.until(
+                ExpectedConditions.visibilityOfElementLocated(locator)
+        ).sendKeys(text);
     }
 
     public String getText(By locator) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         return wait.until(
                 ExpectedConditions.visibilityOfElementLocated(locator)
         ).getText();
     }
 
     public List<String> getTexts(By locator) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         return wait.until(driver -> {
+
+            List<WebElement> elements = driver.findElements(locator);
+
+            if (elements.isEmpty()) {
+                return null;
+            }
+
             List<String> texts = new ArrayList<>();
 
-            for (WebElement element : driver.findElements(locator)) {
+            for (WebElement element : elements) {
                 texts.add(element.getText());
             }
 
@@ -49,9 +58,7 @@ public class BasePage {
         });
     }
 
-
     public boolean isVisible(By locator) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         return wait.until(
                 ExpectedConditions.visibilityOfElementLocated(locator)
         ).isDisplayed();
