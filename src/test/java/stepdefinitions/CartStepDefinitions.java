@@ -98,14 +98,6 @@ public class CartStepDefinitions {
         cartPage.clickContinueShopping();
     }
 
-    @Then("the Products page should be displayed")
-    public void theProductsPageShouldBeDisplayed() {
-
-        Assert.assertTrue(
-                driver.getCurrentUrl().contains("inventory")
-        );
-    }
-
     @When("the user adds the following products to the cart:")
     public void theUserAddsTheFollowingProductsToTheCart(
             DataTable dataTable) {
